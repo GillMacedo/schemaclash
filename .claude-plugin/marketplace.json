@@ -1,0 +1,14 @@
+{
+  "name": "schemaclash-marketplace",
+  "description": "Marketplace for schemaclash, which finds OpenTelemetry Go code that merges resources with different schema URLs and fails with \"conflicting Schema URL\".",
+  "owner": {
+    "name": "Giulliano Macedo"
+  },
+  "plugins": [
+    {
+      "name": "schemaclash",
+      "source": "./plugin",
+      "description": "Find OpenTelemetry Go resource merges that fail with \"conflicting Schema URL\" after an SDK or semconv upgrade, before the service starts."
+    }
+  ]
+}

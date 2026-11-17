@@ -1,0 +1,13 @@
+{
+  "name": "schemaclash",
+  "version": "0.1.0",
+  "description": "Find OpenTelemetry Go resource code that fails with \"conflicting Schema URL\" before it ships: a semconv import that no longer matches the SDK's resource.Default after an upgrade, or a detector built on another semconv version. Reads the source through go list; doesn't run the program.",
+  "author": {
+    "name": "Giulliano Macedo",
+    "url": "https://github.com/GillMacedo"
+  },
+  "homepage": "https://github.com/GillMacedo/schemaclash",
+  "repository": "https://github.com/GillMacedo/schemaclash",
+  "license": "MIT",
+  "keywords": ["go", "golang", "opentelemetry", "otel", "semconv", "observability", "tracing", "dependabot", "upgrade", "static-analysis"]
+}

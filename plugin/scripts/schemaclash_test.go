@@ -60,6 +60,27 @@ func TestFirstLines(t *testing.T) {
 	if got := firstLines("go: downloading a v1\n", 3); got != "(no message)" {
 		t.Errorf("got %q", got)
 	}
+	// The go command prints one progress line for each of these while it
+	// fetches a module, and they say nothing about what failed.
+	progress := []string{
+		"go: downloading example.com/a v1.0.0",
+		"go: finding module for package example.com/b",
+		"go: extracting example.com/c v2.0.0",
+	}
+	errorLine := "main.go:1: cannot find module providing package example.com/d"
+	for _, p := range progress {
+		if got := firstLines(p+"\n"+errorLine+"\n", 2); got != errorLine {
+			t.Errorf("%q was kept: %q", p, got)
+		}
+		if got := firstLines(p+"\n", 2); got != "(no message)" {
+			t.Errorf("%q alone: %q", p, got)
+		}
+	}
+	// A line that only starts the same letters, without the space after the
+	// verb, is a different message and stays.
+	if got := firstLines("go: findingx is not a progress line\n", 2); got != "go: findingx is not a progress line" {
+		t.Errorf("kept too little: %q", got)
+	}
 }
 
 func TestVer(t *testing.T) {

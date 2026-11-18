@@ -114,6 +114,8 @@ schemaclash exits 2 and prints only the reason when it can't trust what it read.
 
 It does the same for a `go.mod`, `vendor/modules.txt` or Go file (yours or vendored) that is empty, garbage, cut off, or replaced by a build log or an HTML error page; a missing import; missing modules with no way to download them; a directory that doesn't exist or has no `go.mod`; patterns that match nothing; packages that don't link `sdk/resource`; an SDK whose `resource.Default` it can't find a schema URL for; and a missing `go` command. A file that the go command doesn't read in that build, such as `go.sum` when building from `vendor/`, doesn't change the result.
 
+The message quotes the first six lines of what the go command said, without its progress lines (`go: downloading`, `go: finding`, `go: extracting`), which say what go started and not what went wrong.
+
 ## Limits
 
 - **It follows names, not types.** Schema URLs that travel through struct fields, function values, interfaces other than detectors, channels or maps aren't followed. A method call on a value is matched by name within its package, so two types with a same-named method are read together.

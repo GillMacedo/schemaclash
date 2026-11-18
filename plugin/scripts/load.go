@@ -108,12 +108,22 @@ func decodeList(r io.Reader) ([]*listPkg, error) {
 	return pkgs, nil
 }
 
+// progressPrefixes are the messages the go command prints while it fetches
+// modules. They say what go started, not what went wrong, so a refusal
+// message that quotes the first lines of a failed go list would otherwise
+// spend them on progress.
+var progressPrefixes = []string{
+	"go: downloading ",
+	"go: finding ",
+	"go: extracting ",
+}
+
 // firstLines keeps the first n lines of go command errors, leaving out
-// its "go: downloading" progress lines.
+// those progress lines.
 func firstLines(s string, n int) string {
 	var keep []string
 	for _, l := range strings.Split(s, "\n") {
-		if !strings.HasPrefix(l, "go: downloading ") {
+		if !progressLine(l) {
 			keep = append(keep, l)
 		}
 	}
@@ -126,6 +136,17 @@ func firstLines(s string, n int) string {
 		lines = append(lines[:n], fmt.Sprintf("(%d more lines)", len(lines)-n))
 	}
 	return strings.Join(lines, "; ")
+}
+
+// progressLine reports whether l is one of the go command's progress
+// messages about fetching a module.
+func progressLine(l string) bool {
+	for _, p := range progressPrefixes {
+		if strings.HasPrefix(l, p) {
+			return true
+		}
+	}
+	return false
 }
 
 func oneLine(s string) string {
